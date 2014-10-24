@@ -18,6 +18,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="78dp"
         android:hint="@string/username_hint" />
+        <requestFocus/>
 
     <EditText
         android:layout_width="match_parent"
