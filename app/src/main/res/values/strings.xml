@@ -26,13 +26,19 @@
     <string name="error_title">We\'re Sorry</string>
     <string name="menu_camera_label">Camera</string>
     <string name="error_external_storage">There was a problem you device\'s external.</string>
+    <string name="general_error">Sorry, there was an error!</string>
+    <string name="video_file_size_warning">The selected video must be less than 10MB.</string>
+    <string name="error_opening_file">There was a problem with the file.</string>
+    <string name="error_file_size_is_too_large">The selected file is too large, select a new file.</string>
+    <string name="empty_recipients_list_message">Choose some friends first</string>
+    <string name="menu_send_label">Send</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>
         <item>Choose Picture</item>
         <item>Choose Video</item>
+    </string-array>
 
-
-   </string-array>
+    <string name="title_activity_recipients">Recipients</string>
 
 </resources>

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -14,18 +13,16 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Toast;
-
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
-
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -34,6 +31,7 @@ import java.util.Locale;
 public class MyActivity extends FragmentActivity implements ActionBar.TabListener {
 
     public static final String TAG = MyActivity.class.getSimpleName();
+
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
     public static final int PICK_PHOTO_REQUEST = 2;
@@ -41,6 +39,8 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
 
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
+
+    public static final int FILE_SIZE_LIMIT = 1024*1024*10; // 10 MB
 
     protected Uri mMediaUri;
 
@@ -50,25 +50,19 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
     public void onClick(DialogInterface dialog, int which){
             switch(which){
                 case 0: //take picture
-                    takePhotoIntent();
+                   takePhoto();
                     break;
                 case 1: //take video
-                    //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    //startActivityForResult(takeVideoIntent, TAKE_VIDEO_REQUEST);
+                    takeVideo();
                     break;
                 case 2: //choose picture
-                    //Intent choosePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    //startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
+                    choosePhoto();
                     break;
                 case 3: //choose video
-                    //Intent chooseVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    //startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
+                    chooseVideo();
                     break;
 
             }
-
-
-
         }
         private Uri getOutputMediaFileUri(int mediaType){
             // To be safe, you should check that the SDCard is mounted
@@ -81,8 +75,8 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
                 File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), appName);
                 //2. Create our own subdirectory
                 if(! mediaStorageDir.exists()){
-                    if(! mediaStorageDir.mkdir()){
-                        Log.e(TAG,"Failed to creat directory.");
+                    if(! mediaStorageDir.mkdirs()){
+                        Log.e(TAG,"Failed to create directory.");
                     }
                 }
                 //3. Create a file name
@@ -93,11 +87,11 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
 
                 String path = mediaStorageDir.getPath() + File.separator;
                 if(mediaType == MEDIA_TYPE_IMAGE){
-                    mediaFile = new File(path + "IMG_" + timestamp+ ".jpg");
+                    mediaFile = new File(path + "IMG_" + timestamp + ".jpg");
 
                 }
                 else if(mediaType == MEDIA_TYPE_VIDEO){
-                    mediaFile = new File(path + "VID_" + timestamp+ ".mp4");
+                    mediaFile = new File(path + "VID_" + timestamp + ".mp4");
 
                 }
                 else{
@@ -121,23 +115,47 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
             else{
                 return false;
             }
-
-
         }
-        //turned into helper method without the assistance of temtreehouse
-        private void takePhotoIntent(){
+        //helper methods created without the assistance of treehouse, will turn this into its own seperate class
+        private void takePhoto(){
             Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+            if (mMediaUri == null) {
+                // display an error
+                Toast.makeText(MyActivity.this, R.string.error_external_storage,
+                        Toast.LENGTH_LONG).show();
+            }
+            else {
+                takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+            }
+        }
+        protected void takeVideo(){
+            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
             if(mMediaUri == null){
                 Toast.makeText(MyActivity.this, R.string.error_external_storage, Toast.LENGTH_LONG).show();
             }
-            else{
-                takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+            else {
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+                takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+                startActivityForResult(takeVideoIntent, TAKE_VIDEO_REQUEST);
             }
-            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+        }
+        protected void choosePhoto() {
+            Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            choosePhotoIntent.setType("image/*");
+            startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
+
+        }
+        protected void chooseVideo() {
+            Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            chooseVideoIntent.setType("image/*)");
+            Toast.makeText(MyActivity.this, getString(R.string.video_file_size_warning), Toast.LENGTH_LONG).show();
+            startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
         }
     };
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -168,8 +186,6 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
         else{
             Log.i(TAG, currentUser.getUsername());
         }
-
-
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -202,6 +218,56 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
                     actionBar.newTab()
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
+                if (data == null) {
+                    Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
+                } else {
+                    mMediaUri = data.getData();
+                }
+
+                Log.i(TAG, "Media URI: " + mMediaUri);
+                if (requestCode == PICK_VIDEO_REQUEST) {
+                    int fileSize = 0;
+
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = getContentResolver().openInputStream((mMediaUri));
+                        fileSize = inputStream.available();
+                    } catch (FileNotFoundException e) {
+                        Toast.makeText(this, getString(R.string.error_opening_file), Toast.LENGTH_LONG).show();
+                        return;
+                    } catch (IOException e) {
+                        Toast.makeText(this, getString(R.string.error_opening_file), Toast.LENGTH_LONG).show();
+                        return;
+                    } finally {
+                        try {
+                            inputStream.close();
+                        }
+                        catch (IOException e) {/*this is purposely blank*/}
+                    }
+                    if (fileSize >= FILE_SIZE_LIMIT){
+                        Toast.makeText(this, getString(R.string.error_file_size_is_too_large), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                } else {
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    mediaScanIntent.setData(mMediaUri);
+                    sendBroadcast(mediaScanIntent);
+                }
+                Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
+                recipientsIntent.setData(mMediaUri);
+                startActivity(recipientsIntent);
+            } else if (requestCode != RESULT_CANCELED) {
+                Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

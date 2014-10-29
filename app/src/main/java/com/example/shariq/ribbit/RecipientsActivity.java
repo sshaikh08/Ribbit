@@ -1,55 +1,50 @@
 package com.example.shariq.ribbit;
 
-import android.app.Activity;
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class EditFriendsActivity extends ListActivity {
+public class RecipientsActivity extends ListActivity {
+    public static final String TAG = RecipientsActivity.class.getSimpleName();
 
-    public static final String TAG = EditFriendsActivity.class.getSimpleName();
-    protected List<ParseUser> mUsers;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
+    protected List<ParseUser> mFriends;
+
+    protected MenuItem mSendMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_edit_friends);
-        setUpActionBar();
+        setContentView(R.layout.activity_recipients);
+        // Show the Up button in the action bar.
+        setupActionBar();
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
     }
 
-
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
 
         mCurrentUser = ParseUser.getCurrentUser();
@@ -57,33 +52,31 @@ public class EditFriendsActivity extends ListActivity {
 
         setProgressBarIndeterminateVisibility(true);
 
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.orderByAscending(ParseConstants.KEY_USERNAME);
-        query.setLimit(1000);
+        ParseQuery<ParseUser> query = mFriendsRelation.getQuery();
+        query.addAscendingOrder(ParseConstants.KEY_USERNAME);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(List<ParseUser> users, ParseException e) {
+            public void done(List<ParseUser> friends, ParseException e) {
                 setProgressBarIndeterminateVisibility(false);
 
                 if (e == null) {
-                    // Success
-                    mUsers = users;
-                    String[] usernames = new String[mUsers.size()];
+                    mFriends = friends;
+
+                    String[] usernames = new String[mFriends.size()];
                     int i = 0;
-                    for (ParseUser user : mUsers) {
+                    for(ParseUser user : mFriends) {
                         usernames[i] = user.getUsername();
                         i++;
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            EditFriendsActivity.this,
+                            getListView().getContext(),
                             android.R.layout.simple_list_item_checked,
                             usernames);
                     setListAdapter(adapter);
-
-                    addFriendCheckmarks();
-                } else {
+                }
+                else {
                     Log.e(TAG, e.getMessage());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(EditFriendsActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
                     builder.setMessage(e.getMessage())
                             .setTitle(R.string.error_title)
                             .setPositiveButton(android.R.string.ok, null);
@@ -94,12 +87,22 @@ public class EditFriendsActivity extends ListActivity {
         });
     }
 
-    private void setUpActionBar() {
+    /**
+     * Set up the {@link android.app.ActionBar}.
+     */
+    private void setupActionBar() {
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.recipients, menu);
+        mSendMenuItem = menu.getItem(0);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -114,6 +117,10 @@ public class EditFriendsActivity extends ListActivity {
                 //
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.action_send:
+                ParseObject message = createMessage();
+                //send(message);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -122,45 +129,31 @@ public class EditFriendsActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        if (getListView().isItemChecked(position)) {
-            // add the friend
-            mFriendsRelation.add(mUsers.get(position));
+        if (l.getCheckedItemCount() > 0) {
+            mSendMenuItem.setVisible(true);
         }
         else {
-            // remove the friend
-            mFriendsRelation.remove(mUsers.get(position));
+            mSendMenuItem.setVisible(false);
         }
-
-        mCurrentUser.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
     }
 
-    private void addFriendCheckmarks() {
-        mFriendsRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> friends, ParseException e) {
-                if (e == null) {
-                    // list returned - look for a match
-                    for (int i = 0; i < mUsers.size(); i++) {
-                        ParseUser user = mUsers.get(i);
+    protected ParseObject createMessage() {
+        ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
+        message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+        message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
+        message.put(ParseConstants.KEY_RECIPIENT_IDS, getRecipientIds());
 
-                        for (ParseUser friend : friends) {
-                            if (friend.getObjectId().equals(user.getObjectId())) {
-                                getListView().setItemChecked(i, true);
-                            }
-                        }
-                    }
-                }
-                else {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
+        return message;
     }
+
+    protected ArrayList<String> getRecipientIds() {
+        ArrayList<String> recipientIds = new ArrayList<String>();
+        for (int i = 0; i < getListView().getCount(); i++) {
+            if (getListView().isItemChecked(i)) {
+                recipientIds.add(mFriends.get(i).getObjectId());
+            }
+        }
+        return recipientIds;
+    }
+
 }
