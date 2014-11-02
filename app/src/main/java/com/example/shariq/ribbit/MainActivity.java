@@ -28,9 +28,9 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class MyActivity extends FragmentActivity implements ActionBar.TabListener {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
-    public static final String TAG = MyActivity.class.getSimpleName();
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
@@ -71,7 +71,7 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
                 //get the Uri
 
                 //1. Get the externalstorage directory
-                String appName = MyActivity.this.getString(R.string.app_name);
+                String appName = MainActivity.this.getString(R.string.app_name);
                 File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), appName);
                 //2. Create our own subdirectory
                 if(! mediaStorageDir.exists()){
@@ -122,7 +122,7 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
             mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
             if (mMediaUri == null) {
                 // display an error
-                Toast.makeText(MyActivity.this, R.string.error_external_storage,
+                Toast.makeText(MainActivity.this, R.string.error_external_storage,
                         Toast.LENGTH_LONG).show();
             }
             else {
@@ -134,7 +134,7 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
             Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
             if(mMediaUri == null){
-                Toast.makeText(MyActivity.this, R.string.error_external_storage, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, R.string.error_external_storage, Toast.LENGTH_LONG).show();
             }
             else {
                 takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
@@ -152,7 +152,7 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
         protected void chooseVideo() {
             Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
             chooseVideoIntent.setType("image/*)");
-            Toast.makeText(MyActivity.this, getString(R.string.video_file_size_warning), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, getString(R.string.video_file_size_warning), Toast.LENGTH_LONG).show();
             startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
         }
     };
@@ -264,6 +264,16 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
                 }
                 Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
                 recipientsIntent.setData(mMediaUri);
+
+                String fileType;
+                if(requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST){
+                    fileType = ParseConstants.TYPE_IMAGE;
+                }
+                else {
+                    fileType = ParseConstants.TYPE_VIDEO;
+                }
+
+                recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
                 startActivity(recipientsIntent);
             } else if (requestCode != RESULT_CANCELED) {
                 Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();

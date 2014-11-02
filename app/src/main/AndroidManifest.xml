@@ -21,7 +21,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MyActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -44,7 +44,7 @@
         <activity
             android:name=".EditFriendsActivity"
             android:label="@string/title_activity_edit_friends"
-            android:parentActivityName=".MyActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -53,7 +53,7 @@
         <activity android:name="com.example.shariq.ribbit.RecipientsActivity"
             android:label="@string/title_activity_recipients"
             android:screenOrientation="portrait"
-            android:parentActivityName="com.example.shariq.ribbit.MyActivity">
+            android:parentActivityName=".MainActivity">
 
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.shariq.ribbit.MyActivity"/>
