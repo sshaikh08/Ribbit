@@ -22,20 +22,21 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
+        // Return a DummySectionFragment (defined as a static inner class
+        // below) with the page number as its lone argument.
 
-        switch(position){
+        switch(position) {
             case 0:
                 return new InboxFragment();
             case 1:
                 return new FriendsFragment();
         }
+
         return null;
     }
 
     @Override
     public int getCount() {
-        // Show 3 total pages.
         return 2;
     }
 

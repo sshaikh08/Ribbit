@@ -31,22 +31,23 @@ import java.util.List;
 
 public class EditFriendsActivity extends ListActivity {
 
-    public static final String TAG = EditFriendsActivity.class.getSimpleName();
-    protected List<ParseUser> mUsers;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
+
+    public static final String TAG = EditFriendsActivity.class.getSimpleName();
+
+    protected List<ParseUser> mUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_edit_friends);
-        setUpActionBar();
+        // Show the Up button in the action bar.
+        setupActionBar();
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
     }
-
 
     @Override
     protected void onResume() {
@@ -70,7 +71,7 @@ public class EditFriendsActivity extends ListActivity {
                     mUsers = users;
                     String[] usernames = new String[mUsers.size()];
                     int i = 0;
-                    for (ParseUser user : mUsers) {
+                    for(ParseUser user : mUsers) {
                         usernames[i] = user.getUsername();
                         i++;
                     }
@@ -81,7 +82,8 @@ public class EditFriendsActivity extends ListActivity {
                     setListAdapter(adapter);
 
                     addFriendCheckmarks();
-                } else {
+                }
+                else {
                     Log.e(TAG, e.getMessage());
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditFriendsActivity.this);
                     builder.setMessage(e.getMessage())
@@ -94,12 +96,14 @@ public class EditFriendsActivity extends ListActivity {
         });
     }
 
-    private void setUpActionBar() {
+    /**
+     * Set up the {@link android.app.ActionBar}.
+     */
+    private void setupActionBar() {
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

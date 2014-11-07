@@ -17,10 +17,11 @@ import com.parse.ParseUser;
 
 public class LoginActivity extends Activity {
 
-    protected TextView mSignUpTextView;
     protected EditText mUsername;
     protected EditText mPassword;
     protected Button mLoginButton;
+
+    protected TextView mSignUpTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,21 +29,21 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_log_in);
 
-        mSignUpTextView = (TextView) findViewById(R.id.signUpText);
-        mSignUpTextView.setOnClickListener(new View.OnClickListener(){
+        mSignUpTextView = (TextView)findViewById(R.id.signUpText);
+        mSignUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
             }
         });
 
-        mUsername = (EditText) findViewById(R.id.usernameField);
-        mPassword = (EditText) findViewById(R.id.passwordField);
-        mLoginButton = (Button) findViewById(R.id.loginButton);
+        mUsername = (EditText)findViewById(R.id.usernameField);
+        mPassword = (EditText)findViewById(R.id.passwordField);
+        mLoginButton = (Button)findViewById(R.id.loginButton);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 String username = mUsername.getText().toString();
                 String password = mPassword.getText().toString();
 
@@ -56,24 +57,24 @@ public class LoginActivity extends Activity {
                             .setPositiveButton(android.R.string.ok, null);
                     AlertDialog dialog = builder.create();
                     dialog.show();
-
-
-                } else {
-                    //Login
+                }
+                else {
+                    // Login
                     setProgressBarIndeterminateVisibility(true);
+
                     ParseUser.logInInBackground(username, password, new LogInCallback() {
                         @Override
-                        public void done(ParseUser parseUser, ParseException e) {
+                        public void done(ParseUser user, ParseException e) {
                             setProgressBarIndeterminateVisibility(false);
 
                             if (e == null) {
-                                // Success!!
+                                // Success!
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
-
-                            } else {
+                            }
+                            else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setMessage(e.getMessage())
                                         .setTitle(R.string.login_error_title)
@@ -81,15 +82,10 @@ public class LoginActivity extends Activity {
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
                             }
-
                         }
                     });
-
                 }
             }
         });
-
-
-            }
-
+    }
 }
