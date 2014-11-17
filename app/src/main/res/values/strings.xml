@@ -47,7 +47,10 @@
     <string name="success_message">Message sent</string>
     <string name="error_sending_message">There was an error sending your message. Please try again.</string>
     <string name="title_activity_view_image">Ribbit</string>
-    <string name="content_des_background_image">Ribbit Background Image</string>
+    <string name="content_desc_background_image">Ribbit Background Image</string>
     <string name="sub_title_text">A Tree House Project</string>
+    <string name="cancel_button_label">CANCEL</string>
+
+    <string name="content_desc_button_divider">Button divider</string>
 
 </resources>
