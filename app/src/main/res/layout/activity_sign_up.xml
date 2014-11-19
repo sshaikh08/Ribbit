@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/AuthBackground"
-    tools:context="com.example.shariq.ribbit.SignUpActivity">
+    tools:context="com.example.shariq.ribbit.ui.SignUpActivity">
     <ImageView
         style="@style/AuthBackgroundImage"
         android:contentDescription="@string/content_desc_background_image"
@@ -23,7 +23,7 @@
         android:id="@+id/editTextLayout">
 
 
-    -<EditText
+    <EditText
         style="@style/AuthEditText"
         android:id="@+id/usernameField"
         android:hint="@string/username_hint">

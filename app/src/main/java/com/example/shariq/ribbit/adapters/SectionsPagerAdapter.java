@@ -1,9 +1,14 @@
-package com.example.shariq.ribbit;
+package com.example.shariq.ribbit.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.shariq.ribbit.R;
+import com.example.shariq.ribbit.ui.FriendsFragment;
+import com.example.shariq.ribbit.ui.InboxFragment;
+
 import java.util.Locale;
 
 
@@ -51,5 +56,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
         return null;
     }
+
+    public int getIcon(int position){
+        switch (position) {
+            case 0:
+                return R.drawable.ic_tab_inbox;
+            case 1:
+                return R.drawable.ic_tab_friends;
+        }
+        return R.drawable.ic_tab_inbox;
+    }
+
 }
 

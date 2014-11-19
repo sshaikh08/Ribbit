@@ -1,25 +1,19 @@
-package com.example.shariq.ribbit;
+package com.example.shariq.ribbit.ui;
 
-import android.app.Activity;
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.shariq.ribbit.utils.ParseConstants;
+import com.example.shariq.ribbit.R;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;

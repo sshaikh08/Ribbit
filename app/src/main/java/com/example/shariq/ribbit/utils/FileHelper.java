@@ -1,4 +1,4 @@
-package com.example.shariq.ribbit;
+package com.example.shariq.ribbit.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

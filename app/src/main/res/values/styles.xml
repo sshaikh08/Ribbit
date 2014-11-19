@@ -24,73 +24,65 @@
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Example</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Example</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Example</item>
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.Example</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Ribbt</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_example</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Example</item>
         <item name="android:editTextBackground">@drawable/apptheme_edit_text_holo_light</item>
         <item name="android:actionOverflowButtonStyle">@style/Theme.Ribbit.Overflow</item>
-
+        <item name="android:listViewStyle">@style/Theme.Ribbit.LightPurpleBackground</item>
+        <item name="android:gridViewStyle">@style/Theme.Ribbit.LightPurpleBackground</item>
     </style>
-    <style name="Theme.Ribbit.Overflow" parent="@android:style/Widget.ActionButton,Overflow">
+    <style name="Theme.Ribbit.LightPurpleBackground">
+        <item name="android:background">@color/light_purple_background</item>
+        <item name="android:divider">@null</item>
+    </style>
+    
+    <style name="Theme.Ribbit.Overflow" parent="@android:style/Widget.ActionButton.Overflow">
        <item name="android:src">@drawable/ic_menu_overflow</item>
     </style>
-
-    <style name="ActionBar.Solid.Example" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+    <style name="ActionBar.Solid.Ribbt" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@drawable/ab_solid_example</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_example</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_example</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Example</item>
+        <item name="android:titleTextStyle">@style/ActionBar.Solid.Example.TitleTextStyle</item>
     </style>
-
+    <style parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title" name="ActionBar.Solid.Example.TitleTextStyle">
+        <item name="android:textColor">@color/text_color</item>
+    </style>
     <style name="ActionBar.Transparent.Example" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@drawable/ab_transparent_example</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Example</item>
     </style>
-
     <style name="PopupMenu.Example" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>
     </style>
-
     <style name="DropDownListView.Example" parent="@android:style/Widget.Holo.Light.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background_example</item>
     </style>
-
     <style name="ActionBarTabStyle.Example" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_example</item>
     </style>
-
     <style name="DropDownNav.Example" parent="@android:style/Widget.Holo.Light.Spinner">
         <item name="android:background">@drawable/spinner_background_ab_example</item>
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_example</item>
     </style>
-
     <style name="ProgressBar.Example" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_example</item>
     </style>
-
     <style name="ActionButton.CloseMode.Example" parent="@android:style/Widget.Holo.Light.ActionButton.CloseMode">
         <item name="android:background">@drawable/btn_cab_done_example</item>
     </style>
-
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
     <style name="Theme.Example.Widget" parent="@android:style/Theme.Holo">
         <item name="android:popupMenuStyle">@style/PopupMenu.Example</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Example</item>
     </style>
-
-
-
-
-
-
     <style name="AuthBackground">
         <item name="android:background">@drawable/background_fill</item>
-
-</style>
-
-
+    </style>
     <style name="AuthBackgroundImage">
         <item name="android:scaleType">fitStart</item>
         <item name="android:layout_width">match_parent</item>
@@ -98,8 +90,7 @@
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_alignParentTop">true</item>
         <item name="android:src">@drawable/background</item>
-
-</style>
+    </style>
     <style parent="android:Widget.Holo.Light.TextView" name="AuthTitle">
         <item name="android:layout_marginTop">32dp</item>
         <item name="android:textColor">@android:color/white</item>
@@ -109,19 +100,15 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentTop">true</item>
         <item name="android:layout_centerHorizontal">true</item>
-    <item name="android:text">@string/app_name</item>
-
-</style>
-
-
+        <item name="android:text">@string/app_name</item>
+    </style>
     <style name="AuthTitle.AuthSubTitle">
         <item name="android:textSize">13sp</item>
         <item name="android:layout_below">@+id/title</item>
         <item name="android:text">@string/sub_title_text</item>
         <item name="android:layout_alignParentTop">false</item>
         <item name="android:layout_marginTop">0dp</item>
-
-</style>
+    </style>
     <style name="AuthFieldContainer">
         <item name="android:background">@android:color/white</item>
         <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
@@ -135,18 +122,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_below">@id/subtitle</item>
-
-</style>
-
-
+    </style>
     <style parent="android:Widget.Holo.Light.EditText" name="AuthEditText">
         <item name="android:ems">10</item>
         <item name="android:textColorHint">@color/light_gray</item>
         <item name="android:textSize">17sp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-
-</style>
+    </style>
     <style parent="android:Widget.Holo.Light.Button" name="AuthButton">
         <item name="android:background">@drawable/button_custom</item>
         <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
@@ -155,6 +138,5 @@
         <item name="android:textSize">13sp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-
-</style>
+    </style>
 </resources>

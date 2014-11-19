@@ -1,4 +1,4 @@
-package com.example.shariq.ribbit;
+package com.example.shariq.ribbit.ui;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.shariq.ribbit.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;

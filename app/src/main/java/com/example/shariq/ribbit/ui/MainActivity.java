@@ -1,4 +1,4 @@
-package com.example.shariq.ribbit;
+package com.example.shariq.ribbit.ui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +23,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
+
+import com.example.shariq.ribbit.utils.ParseConstants;
+import com.example.shariq.ribbit.R;
+import com.example.shariq.ribbit.adapters.SectionsPagerAdapter;
 import com.parse.ParseAnalytics;
 
 import com.parse.ParseUser;
@@ -212,7 +216,7 @@ public class MainActivity extends FragmentActivity implements
             // the TabListener interface, as the callback (listener) for when
             // this tab is selected.
             actionBar.addTab(actionBar.newTab()
-                    .setText(mSectionsPagerAdapter.getPageTitle(i))
+                    .setIcon(mSectionsPagerAdapter.getIcon(i))
                     .setTabListener(this));
         }
     }

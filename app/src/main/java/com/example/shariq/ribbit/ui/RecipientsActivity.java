@@ -1,4 +1,4 @@
-package com.example.shariq.ribbit;
+package com.example.shariq.ribbit.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.shariq.ribbit.utils.FileHelper;
+import com.example.shariq.ribbit.utils.ParseConstants;
+import com.example.shariq.ribbit.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;

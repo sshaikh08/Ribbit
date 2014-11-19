@@ -1,4 +1,4 @@
-package com.example.shariq.ribbit;
+package com.example.shariq.ribbit.utils;
 
 /**
  * Created by Shariq on 10/21/2014.

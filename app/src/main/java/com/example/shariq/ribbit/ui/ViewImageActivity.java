@@ -1,4 +1,4 @@
-package com.example.shariq.ribbit;
+package com.example.shariq.ribbit.ui;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -7,6 +7,7 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.example.shariq.ribbit.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.Timer;
