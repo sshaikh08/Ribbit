@@ -6,15 +6,19 @@
 
 
     <GridView
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/friendsGrid"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:verticalSpacing="@dimen/user_grid_spacing"
+        android:stretchMode="columnWidth"
+        android:columnWidth="90dp"
+        android:numColumns="auto_fit"
+        android:horizontalSpacing="@dimen/user_grid_spacing"
+        android:clipToPadding="false"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:numColumns="3"
-        android:horizontalSpacing="@dimen/user_grid_spacing"
-        android:verticalSpacing="@dimen/user_grid_spacing"
-        android:clipToPadding="false"/>
+        android:id="@+id/friendsGrid"> </GridView>
     
     <TextView
         android:id="@android:id/empty"
